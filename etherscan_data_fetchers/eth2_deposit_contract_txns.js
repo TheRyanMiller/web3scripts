@@ -15,9 +15,9 @@ const dbName = 'deposit-contract';
 let depositContractAddress = "0x00000000219ab540356cBB839Cbe05303d7705Fa";
 let startblock = "0";
 let endBlock = "99999999";
-let url = "https://api.etherscan.io/api?module=account&action=balance&address=0x00000000219ab540356cBB839Cbe05303d7705Fa&tag=latest&apikey=YourApiKeyToken";
-url = "https://api.etherscan.io/api?module=account&action=txlist&address="+depositContractAddress+"&startblock=0&endblock="+endBlock+"&sort=asc&apikey=YourApiKeyToken";
-url = "https://api.etherscan.io/api?module=logs&action=getLogs&fromBlock="+startBlock+"&toBlock=latest&address="+depositContractAddress+"&topic0=0xf63780e752c6a54a94fc52715dbc5518a3b4c3c2833d301a204226548a2a8545&apikey=YourApiKeyToken"
+let url = "https://api.etherscan.io/api?module=account&action=balance&address=0x00000000219ab540356cBB839Cbe05303d7705Fa&tag=latest&apikey="+process.env.ETHERSCAN_API_KEY;
+url = "https://api.etherscan.io/api?module=account&action=txlist&address="+depositContractAddress+"&startblock=0&endblock="+endBlock+"&sort=asc&apikey="+process.env.ETHERSCAN_API_KEY;
+url = "https://api.etherscan.io/api?module=logs&action=getLogs&fromBlock="+startBlock+"&toBlock=latest&address="+depositContractAddress+"&topic0=0xf63780e752c6a54a94fc52715dbc5518a3b4c3c2833d301a204226548a2a8545&apikey="+process.env.ETHERSCAN_API_KEY;
 
 MongoClient.connect(mongoUrl,{useUnifiedTopology: true}, (err, client)=>{
   assert.equal(null, err);

@@ -6,5 +6,5 @@ module.exports = (contractAddress) => new Promise ((resolve,reject) => {
     axios.get(url).then(resp => {
         let contractABI = JSON.parse(resp.data.result);
         resolve(contractABI);
-    })
+    }).catch(err => reject("Etherscan call failed "+err))
 })

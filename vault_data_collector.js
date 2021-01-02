@@ -12,7 +12,7 @@ module.exports = (vaultAlias) => new Promise ((resolve,reject) => {
             match = true;
             get_abi(v.address).then(result=>{
                 v.abi = result;
-                resolve(v);
+                setTimeout(resolve(v), 1000);
             }).catch(err=>reject("Etherscan call failed "+err))
         }
     });
