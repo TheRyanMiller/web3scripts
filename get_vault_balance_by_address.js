@@ -15,6 +15,7 @@ module.exports = (vaultAlias, myAddress) => new Promise ((resolve,reject) => {
             result.yBalance = yBalance;
             contract.methods.getPricePerFullShare().call().then(res=>{
                 let lpBalance = res / 1e18 * yBalance;
+                result.pps = res / 1e18;
                 result.lpBalance = lpBalance;
                 resolve(result);
             })
