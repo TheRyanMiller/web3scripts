@@ -26,7 +26,7 @@ module.exports = (vaultAlias) => {
                     msg += "<p>My withdrawable balance:\n"+r.lpBalance+"</p>";
                     msg += "<p>Vault balance\n"+(vaultBalance)+"</p>";
                     msg += "<p>More deposits needed:\n"+amountNeeded+"</p>";
-                    msg += "<p><a href='https://etherscan.io/token/0x075b1bb99792c9E1041bA13afEf80C91a1e70fB3?a=0x7Ff566E1d69DEfF32a7b244aE7276b9f90e9D0f6'>Etherscan Link</a></p>";
+                    msg += "<p><a href='https://etherscan.io/token/"+vault.tokenAddress+"0x075b1bb99792c9E1041bA13afEf80C91a1e70fB3?a="+vault.address+"'>Etherscan Link</a></p>";
                     if(vaultBalance > increment){
                         email_alert(msg);
                         increment++;

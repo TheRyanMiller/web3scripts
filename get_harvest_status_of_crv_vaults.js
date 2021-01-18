@@ -1,9 +1,7 @@
-const Web3 = require('web3');
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
-
-const web3 = new Web3(new Web3.providers.HttpProvider(process.env.GETH_NODE));
+const web3 = require('./web3.js')();
 
 const crvStrategyKeep3rAddress = "0xd0aC37E3524F295D141d3839d5ed5F26A40b589D";
 
@@ -11,6 +9,10 @@ const vaultData = JSON.parse(fs.readFileSync(path.normalize(path.dirname(require
 const contractAbiPath = path.normalize(path.dirname(require.main.filename)+'/contract_abis/crvStrategyKeep3r.json');
 const normalizedPath = path.normalize(contractAbiPath); // Windows + Linux friendly
 const abi = JSON.parse(fs.readFileSync(normalizedPath));
+
+const stratAbiPath = path.normalize(path.dirname(require.main.filename)+'/contract_abis/crvGUSDstrategy.json');
+const normalizedPath2 = path.normalize(stratAbiPath); // Windows + Linux friendly
+const stratAbi = JSON.parse(fs.readFileSync(normalizedPath2));
 
 let contract = new web3.eth.Contract(abi, crvStrategyKeep3rAddress);
 let harvestableCrvVaults = [];
@@ -20,6 +22,7 @@ let deployBlock = 11191799;
 contract.getPastEvents("StrategyAdded",{fromBlock: deployBlock, toBlock: 'latest'}).then((events,error)=>{
     let calculateHarvestPromises = [];
     let requiredHarvestPromises = [];
+    let withdrawFeePromises = [];
     events.forEach(e=>{
         vaultData.forEach(v => {
             if(v.strategyAddress === e.returnValues['0']){
@@ -32,6 +35,8 @@ contract.getPastEvents("StrategyAdded",{fromBlock: deployBlock, toBlock: 'latest
         harvestableCrvVaults.push(vault);
         calculateHarvestPromises.push(contract.methods.calculateHarvest(vault.strategyAddress).call());
         requiredHarvestPromises.push(contract.methods.requiredHarvest(vault.strategyAddress).call());
+        let strat = new web3.eth.Contract(stratAbi, vault.strategyAddress);
+        withdrawFeePromises.push(strat.methods.withdrawalFee().call());
         vault = {};
     })
 
@@ -47,8 +52,15 @@ contract.getPastEvents("StrategyAdded",{fromBlock: deployBlock, toBlock: 'latest
                     harvestableCrvVaults[i].requiredHarvest - harvestableCrvVaults[i].currentHarvestableCrv : 0;
                 harvestableCrvVaults[i].workable = harvestableCrvVaults[i].remainingUntilHarvest === 0 && harvestableCrvVaults[i].requiredHarvest > 0;
             }
-            harvestableCrvVaults.sort(sortByProperty("remainingUntilHarvest")) // Sort remaining until harvest towards the top
-            console.log(harvestableCrvVaults);
+            console.log("withdrawfeespromise..")
+            Promise.all(withdrawFeePromises).then(values=>{
+                for(let i=0;i<values.length;i++){
+                    harvestableCrvVaults[i].withdrawalFee = values[i];
+                }
+                harvestableCrvVaults.sort(sortByProperty("remainingUntilHarvest")) // Sort remaining until harvest towards the top
+                console.log(harvestableCrvVaults);
+                console.log(new Date())
+            })
         })
     })
 })
