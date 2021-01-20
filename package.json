@@ -13,6 +13,7 @@
     "axios": "^0.21.1",
     "cron": "^1.8.2",
     "dotenv": "^8.2.0",
+    "ethers": "^5.0.26",
     "fs": "0.0.1-security",
     "moment": "^2.29.1",
     "mongoose": "^5.11.6",

@@ -52,14 +52,13 @@ contract.getPastEvents("StrategyAdded",{fromBlock: deployBlock, toBlock: 'latest
                     harvestableCrvVaults[i].requiredHarvest - harvestableCrvVaults[i].currentHarvestableCrv : 0;
                 harvestableCrvVaults[i].workable = harvestableCrvVaults[i].remainingUntilHarvest === 0 && harvestableCrvVaults[i].requiredHarvest > 0;
             }
-            console.log("withdrawfeespromise..")
             Promise.all(withdrawFeePromises).then(values=>{
                 for(let i=0;i<values.length;i++){
                     harvestableCrvVaults[i].withdrawalFee = values[i];
                 }
                 harvestableCrvVaults.sort(sortByProperty("remainingUntilHarvest")) // Sort remaining until harvest towards the top
                 console.log(harvestableCrvVaults);
-                console.log(new Date())
+                console.log((new Date()).toLocaleString("en-US", {timeZone: "America/New_York"}))
             })
         })
     })
