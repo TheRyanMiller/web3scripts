@@ -23,6 +23,7 @@ contract.getPastEvents("StrategyAdded",{fromBlock: deployBlock, toBlock: 'latest
     let calculateHarvestPromises = [];
     let requiredHarvestPromises = [];
     let withdrawFeePromises = [];
+    let vaultBalancePromises = [];
     events.forEach(e=>{
         vaultData.forEach(v => {
             if(v.strategyAddress === e.returnValues['0']){
@@ -54,7 +55,11 @@ contract.getPastEvents("StrategyAdded",{fromBlock: deployBlock, toBlock: 'latest
             }
             Promise.all(withdrawFeePromises).then(values=>{
                 for(let i=0;i<values.length;i++){
-                    harvestableCrvVaults[i].withdrawalFee = values[i];
+                     let fee = values[i];
+                     if(fee != "0"){
+                         fee = (Number(fee) / 100) + "%"
+                     }
+                     harvestableCrvVaults[i].withdrawalFee = fee;
                 }
                 harvestableCrvVaults.sort(sortByProperty("remainingUntilHarvest")) // Sort remaining until harvest towards the top
                 console.log(harvestableCrvVaults);
