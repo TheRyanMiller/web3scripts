@@ -6,5 +6,5 @@ require('dotenv').config();
 
 let check_if_withdrawable = cron.schedule("* * * * *", () => {
     console.log("---"+new Date()+"---");
-    check_vault_withdrawable("crvSBTC");
+    check_vault_withdrawable("crvGUSD");
 })

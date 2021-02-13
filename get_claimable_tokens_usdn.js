@@ -12,20 +12,20 @@ const url = "https://api.coingecko.com/api/v3/simple/price?ids=curve-dao-token&v
 
 
 
-let abiFilePath = "contract_abis/gusd_gauge.json";
+let abiFilePath = "contract_abis/crvUSDNgauge.json";
 let abi = JSON.parse(fs.readFileSync(abiFilePath));
 
 //gusd
-let strategyAddress = "0xD42eC70A590C6bc11e9995314fdbA45B4f74FABb";
+let strategyAddress = "0x406813fF2143d178d1Ebccd2357C20A424208912";
 let vaultAddress = "";
-let gusdGauge = "0xc5cfada84e902ad92dd40194f0883ad49639b023";
+let usdnGauge = "0xF98450B5602fa59CC66e1379DFfB6FDDc724CfC4";
 let claimAddress = "0xf147b8125d2ef93fb6965db97d6746952a133934";
 
 let deployBlock = 11052984;
 let recentBlock = 11283161;
 
 let count = 0;
-let contract = new web3.eth.Contract(abi, gusdGauge);
+let contract = new web3.eth.Contract(abi, usdnGauge);
 let vaultBalance = 0;
 let myBalance = 0;
 let myShare = 0;
@@ -37,9 +37,9 @@ const EXCHANGE_LOSS = 0.09;
 console.log(new Date());
 contract.methods.claimable_tokens(process.env.MY_ADDRESS).call().then(res=>{
     harvestablecrv = web3.utils.fromWei(res,'ether');
-    vault_balance_by_address("crvGUSD",process.env.MY_ADDRESS).then(r => {
-        myBalance = r.lpBalance;
-        get_vault_balances("crvGUSD").then(r => {
+    vault_balance_by_address("crvUSDN",process.env.MY_ADDRESS).then(r => {
+        myBalance = 1e18;//r.lpBalance;
+        get_vault_balances("crvUSDN").then(r => {
             vaultBalance = r;
             myShare = myBalance / (vaultBalance);
             govFee = harvestablecrv * .10;

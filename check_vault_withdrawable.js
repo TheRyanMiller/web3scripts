@@ -7,7 +7,6 @@ const email_alert = require('./utilities/email_alert');
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.GETH_NODE));
 let vaultBalance = 0;
-let increment = 1;
 
 module.exports = (vaultAlias) => {
     let myAddress = process.env.MY_ADDRESS;
@@ -22,14 +21,13 @@ module.exports = (vaultAlias) => {
                     console.log('\x1b[36m%s\x1b[0m', "My withdrawable balance:", r.lpBalance);
                     console.log('\x1b[36m%s\x1b[0m',"Is withdrawable?:", r.lpBalance < vaultBalance);
                     let amountNeeded = r.lpBalance - (vaultBalance) < 0 ? 0 : r.lpBalance - vaultBalance;
-                    let msg = "<p>Vault: "+vaultAlias+"</p>";
-                    msg += "<p>My withdrawable balance:\n"+r.lpBalance+"</p>";
-                    msg += "<p>Vault balance\n"+(vaultBalance)+"</p>";
-                    msg += "<p>More deposits needed:\n"+amountNeeded+"</p>";
-                    msg += "<p><a href='https://etherscan.io/token/"+vault.tokenAddress+"0x075b1bb99792c9E1041bA13afEf80C91a1e70fB3?a="+vault.address+"'>Etherscan Link</a></p>";
-                    if(vaultBalance > increment){
+                    if(vaultBalance > amountNeeded){
+                        let msg = "<p>Vault: "+vaultAlias+"</p>";
+                        msg += "<p>My withdrawable balance:\n"+r.lpBalance+"</p>";
+                        msg += "<p>Vault balance\n"+(vaultBalance)+"</p>";
+                        msg += "<p>More deposits needed:\n"+amountNeeded+"</p>";
+                        msg += "<p><a href='https://etherscan.io/token/"+vault.tokenAddress+"0x075b1bb99792c9E1041bA13afEf80C91a1e70fB3?a="+vault.address+"'>Etherscan Link</a></p>";
                         email_alert(msg);
-                        increment++;
                     }
                 })
             })
