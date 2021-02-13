@@ -21,7 +21,7 @@ module.exports = (vaultAlias) => {
                     console.log('\x1b[36m%s\x1b[0m', "My withdrawable balance:", r.lpBalance);
                     console.log('\x1b[36m%s\x1b[0m',"Is withdrawable?:", r.lpBalance < vaultBalance);
                     let amountNeeded = r.lpBalance - (vaultBalance) < 0 ? 0 : r.lpBalance - vaultBalance;
-                    if(vaultBalance > amountNeeded){
+                    if(r.lpBalance < vaultBalance){
                         let msg = "<p>Vault: "+vaultAlias+"</p>";
                         msg += "<p>My withdrawable balance:\n"+r.lpBalance+"</p>";
                         msg += "<p>Vault balance\n"+(vaultBalance)+"</p>";
