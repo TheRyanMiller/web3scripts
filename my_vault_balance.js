@@ -75,8 +75,8 @@ axios.get(url).then((response, error) => {
         console.log("Current harvestable Value (USD): $"+(crvPrice*crvAmt).toFixed(2))
         if(isv2){
             vaultContract.methods.pricePerShare().call().then(ppfs=>{
-                console.log("ppfs:", result)
                 vaultContract.methods.balanceOf(process.env.MY_ADDRESS).call().then(mybalance=>{
+                    console.log("pricePerShare:",ppfs/1e18)
                     console.log("\n--- My Holdings ---")
                     console.log('\x1b[36m%s\x1b[0m',"My Balance:", (ppfs/1e18)*(mybalance/1e18))
                 })
