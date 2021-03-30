@@ -18,6 +18,8 @@ const bbtcVault = "0xA8B1Cb4ed612ee179BDeA16CCa6Ba596321AE52D";
 const voter = "0xF147b8125d2ef93FB6965Db97D6746952a133934";
 const a3crvGauge = "0xd662908ada2ea1916b3318327a97eb18ad588b5d";
 const a3crvVault = "0x03403154afc09Ce8e44C3B185C82C6aD5f86b9ab";
+const obtcVault = "0x7F83935EcFe4729c4Ea592Ab2bC1A32588409797";
+const obtcGauge = "0x11137B10C210b579405c21A07489e28F3c040AB1";
 let gauge = sethGauge;
 let vault = sethVault;
 let isv2 = true;
@@ -27,6 +29,11 @@ let gaugeName = args[0];
 if(gaugeName == "usdn"){
     gauge = usdnGauge;
     vault = usdnVault;
+    isv2 = false;
+}
+if(gaugeName == "obtc"){
+    gauge = obtcGauge;
+    vault = obtcVault;
     isv2 = false;
 }
 if(gaugeName == "seth"){
@@ -76,17 +83,23 @@ axios.get(url).then((response, error) => {
         if(isv2){
             vaultContract.methods.pricePerShare().call().then(ppfs=>{
                 vaultContract.methods.balanceOf(process.env.MY_ADDRESS).call().then(mybalance=>{
-                    console.log("pricePerShare:",ppfs/1e18)
-                    console.log("\n--- My Holdings ---")
-                    console.log('\x1b[36m%s\x1b[0m',"My Balance:", (ppfs/1e18)*(mybalance/1e18))
+                    if(mybalance > 0){
+                        console.log("pricePerShare:",ppfs/1e18)
+                        console.log("\n--- My Holdings ---")
+                        console.log('\x1b[36m%s\x1b[0m',"My Balance:", (ppfs/1e18)*(mybalance/1e18))
+                        if(gaugeName == "seth") console.log('\x1b[36m%s\x1b[0m',"My Earnings:", (ppfs/1e18)*(mybalance/1e18) - (43893334701427720181/1e18))
+                    }
                 })
             })
         }
         if(!isv2){
             vaultContract.methods.getPricePerFullShare().call().then(ppfs=>{
                 vaultContract.methods.balanceOf(process.env.MY_ADDRESS).call().then(mybalance=>{
-                    console.log("\n--- My Holdings ---")
-                    console.log('\x1b[36m%s\x1b[0m',"My Balance:", (ppfs/1e18)*(mybalance/1e18))
+                    if(mybalance > 0){
+                        console.log("\n--- My Holdings ---")
+                        console.log('\x1b[36m%s\x1b[0m',"My Balance:", mybalance/1e18*ppfs/1e18)
+                        if(gaugeName == "bbtc") console.log('\x1b[36m%s\x1b[0m',"My Earnings:", (ppfs/1e18)*(mybalance/1e18) - (4096439165277762450/1e18))
+                    }
                 })
             })
         }
