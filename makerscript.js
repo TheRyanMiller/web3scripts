@@ -1,24 +1,17 @@
 require('dotenv').config();
-const Maker = require('@makerdao/dai');
-const { McdPlugin } = require('@makerdao/dai-plugin-mcd');
-const mgr = maker.service('mcd:cdpManager');
 const fs = require('fs');
 const path = require('path');
 const web3 = require('./web3.js')();
 
-//let makerContract="0x81FE72B5A8d1A857d176C3E7d5Bd2679A9B85763"; // Mat
-let makerContract = "0x74CB42EfE280B14A7F7BaA31d4146528686ff197"
-web3.eth.getStorageAt(makerContract).then(res=>{
-    price = res;
-    console.log(res)
-});
 
-work()
+let want = '0xc5bddf9843308380375a611c18b50fb9341f502a';
 
-async function work() {
-    const vault = await mgr.getCdp(111);
-    console.log(vault)
+function getClaimable3Crv() public view returns (uint256) {
+    IyveCRV YveCrv = IyveCRV(address(want));
+    uint256 claimable = YveCrv.claimable(address(this));
+    uint256 claimableToAdd = (YveCrv.index().sub(YveCrv.supplyIndex(address(this))))
+        .mul(YveCrv.balanceOf(address(this)))
+        .div(1e18);
+    return claimable.mul(1e18).add(claimableToAdd);
 }
-
-//console.log(web3.fromWei(web3.toInt(price.slice(16-price.length-1)), 'ether'))
 

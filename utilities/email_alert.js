@@ -15,7 +15,7 @@ module.exports = (message) => {
     };
 
     mailOptions.to = process.env.MY_EMAIL;
-    mailOptions.subject = "Yearn Vault Alert";
+    mailOptions.subject = "Token Price Alert";
     mailOptions.html = message;
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
