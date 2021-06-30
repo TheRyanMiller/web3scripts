@@ -31,5 +31,4 @@ let recurring_job = cron.schedule("* * * * *", () => {
             }).catch(err => console.log(err))
         };
     });
-    
 })
