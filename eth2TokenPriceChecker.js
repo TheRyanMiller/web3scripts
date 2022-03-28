@@ -6,7 +6,7 @@ const fs = require('fs');
 const email_alert = require('./utilities/email_alert');
 const cron = require('node-cron');
 
-let abiFilePath = "contract_abis/ankrethpool.json";
+let abiFilePath = "/apps/web3scripts/contract_abis/ankrethpool.json";
 let abi = JSON.parse(fs.readFileSync(abiFilePath));
 
 let ankrEthPoolAddress = "0xA96A65c051bF88B4095Ee1f2451C2A9d43F53Ae2";
