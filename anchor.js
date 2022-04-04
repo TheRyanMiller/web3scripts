@@ -73,7 +73,7 @@ async function getMarketBalances(myaccount, startBlockNumber, endBlockNumber) {
         if(token == ""){
             balance = await web3.eth.getBalance(market);
             balance = balance / 10**18;
-            balance = randomIntFromInterval(1, 6);
+            // balance = randomIntFromInterval(1, 6);
             weth = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
             price = await oracle.methods.getPriceUsdcRecommended(weth).call() / 10**6
             newUsdValue = price * balance;
@@ -84,7 +84,7 @@ async function getMarketBalances(myaccount, startBlockNumber, endBlockNumber) {
             balance = await erc20.methods.balanceOf(market).call();
             decimals = await erc20.methods.decimals().call();
             balance = balance / 10**decimals;
-            balance = randomIntFromInterval(1, 6);
+            // balance = randomIntFromInterval(1, 6);
             price = await oracle.methods.getPriceUsdcRecommended(token).call() / 10**6
             newUsdValue = price * balance;
             prevUsdValue = price * lastBalance;
