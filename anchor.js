@@ -91,7 +91,7 @@ async function getMarketBalances(myaccount, startBlockNumber, endBlockNumber) {
         }
         console.log(key, balance, newUsdValue);
         
-        if(Math.abs(newUsdValue - prevUsdValue) > usdThreshold){
+        if(Math.abs(newUsdValue) > usdThreshold){
             shouldAlert = true;
             markets[key]["last_alert"] = parseInt(Date.now()/1000);
         }
